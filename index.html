@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>리마크 야간 함께공부방</title>
+<title>리마크 별빛독서실</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=block" rel="stylesheet">
@@ -127,7 +127,7 @@
 
   <div class="wrap">
     <div class="top">
-      <div class="brand">리마크 야간 함께공부방<small>REMARK</small></div>
+      <div class="brand">리마크 별빛독서실<small>REMARK</small></div>
       <div class="clock" id="clock">--:--</div>
     </div>
 
@@ -221,14 +221,14 @@
       setAccent('idle');phaseEl.textContent='곧 시작';
       sessEl.textContent='밤 10시에 자동으로 시작합니다';
       timerEl.textContent=fmt(a.remaining);
-      document.title='시작까지 '+fmt(a.remaining)+' · 함께공부방';
+      document.title='시작까지 '+fmt(a.remaining)+' · 별빛독서실';
       lastPhase=null;return;
     }
     if(a.state==='post'){
       setAccent('idle');phaseEl.textContent='오늘 종료';
       sessEl.textContent='수고했어요. 내일 밤 10시에 또 만나요';
       timerEl.textContent='00:00';
-      document.title='오늘 함께공부방 종료';
+      document.title='오늘 별빛독서실 종료';
       lastPhase=null;return;
     }
     // 진행 중
@@ -238,7 +238,7 @@
     phaseEl.textContent=a.phase==='focus'?'집중':'휴식';
     sessEl.textContent=a.phase==='focus'?(a.session+'교시 진행 중'):(a.session+'교시 후 쉬는 시간');
     timerEl.textContent=fmt(a.remaining);
-    document.title=(a.phase==='focus'?'[집중] ':'[휴식] ')+fmt(a.remaining)+' · 함께공부방';
+    document.title=(a.phase==='focus'?'[집중] ':'[휴식] ')+fmt(a.remaining)+' · 별빛독서실';
   }
 
   // ── 수동 모드 ──
@@ -247,7 +247,7 @@
     timerEl.textContent=fmt(remaining);
     phaseEl.textContent=phase==='focus'?'집중':'휴식';
     sessEl.textContent=(phase==='focus'?session+'교시':session+'교시 후 쉬는 시간')+(running?' 진행 중':' · 대기');
-    document.title=(phase==='focus'?'[집중] ':'[휴식] ')+fmt(remaining)+' · 함께공부방';
+    document.title=(phase==='focus'?'[집중] ':'[휴식] ')+fmt(remaining)+' · 별빛독서실';
   }
   function manualSwitch(){
     if(phase==='focus'){phase='break';remaining=breakSec();doFlash(520);}
