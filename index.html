@@ -10,7 +10,7 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   :root{
-    --amber:#f5c969; --blue:#5aa9e6; --calm:#5fc9a8;
+    --amber:#f5c969; --blue:#5aa9e6; --calm:#5fc9a8; --violet:#b39cf0;
     --accent:var(--amber);
   }
   html,body{height:100%;}
@@ -26,9 +26,21 @@
   }
   body.break{
     background:
-      radial-gradient(120% 90% at 82% 8%, rgba(95,201,168,.14) 0%, rgba(95,201,168,0) 46%),
+      radial-gradient(120% 90% at 82% 8%, rgba(95,201,168,.16) 0%, rgba(95,201,168,0) 46%),
       radial-gradient(110% 120% at 10% 112%, rgba(46,117,182,.26) 0%, rgba(46,117,182,0) 55%),
       linear-gradient(150deg,#0b1f24 0%,#0f2a2e 55%,#081a1c 100%);
+  }
+  body.pre{
+    background:
+      radial-gradient(120% 90% at 82% 8%, rgba(179,156,240,.18) 0%, rgba(179,156,240,0) 46%),
+      radial-gradient(110% 120% at 10% 112%, rgba(99,82,182,.30) 0%, rgba(99,82,182,0) 55%),
+      linear-gradient(150deg,#14122c 0%,#1b193a 55%,#0f0d24 100%);
+  }
+  body.post{
+    background:
+      radial-gradient(120% 90% at 82% 8%, rgba(90,169,230,.18) 0%, rgba(90,169,230,0) 46%),
+      radial-gradient(110% 120% at 10% 112%, rgba(46,117,182,.34) 0%, rgba(46,117,182,0) 55%),
+      linear-gradient(150deg,#08182f 0%,#0c2247 55%,#06142a 100%);
   }
   /* 별 */
   .star{position:fixed;background:#fff;border-radius:50%;opacity:.4;}
@@ -59,6 +71,11 @@
     font-variant-numeric:tabular-nums;
     text-shadow:0 0 60px rgba(245,201,105,.18);
   }
+  .timer.msgbig{
+    font-size:clamp(34px,6.2vw,82px);line-height:1.32;letter-spacing:-.01em;
+    font-variant-numeric:normal;text-align:center;
+    text-shadow:0 0 50px rgba(90,169,230,.24);
+  }
   .msg{
     margin-top:26px;max-width:900px;text-align:center;
     font-size:27px;font-weight:600;line-height:1.4;color:#eaf1fa;
@@ -68,6 +85,12 @@
   .msg:hover{border-color:rgba(255,255,255,.18);}
   .msg:focus{border-color:var(--accent);background:rgba(255,255,255,.04);}
   .msg:empty:before{content:attr(data-ph);color:#5d738f;}
+  body.post .msg{display:none;}
+  /* 휴식 때만 쉬는 문구로 교체 (원장 한마디는 숨김) */
+  #breakmsg{display:none;cursor:default;}
+  #breakmsg:hover{border-color:transparent;}
+  body.break #msg{display:none;}
+  body.break #breakmsg{display:block;}
 
   /* 하단 규칙 + 컨트롤 */
   .bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;}
@@ -137,6 +160,7 @@
       <div class="timer" id="timer">50:00</div>
       <div class="msg" id="msg" contenteditable="true" spellcheck="false"
            data-ph="여기를 눌러 오늘의 한마디를 입력하세요"></div>
+      <div class="msg" id="breakmsg">물 한잔 하고, 곧 출발!</div>
     </div>
 
     <div class="bottom">
@@ -185,9 +209,11 @@
   }
 
   function setAccent(kind){
-    if(kind==='focus'){document.body.classList.remove('break');document.documentElement.style.setProperty('--accent','var(--amber)');}
-    else if(kind==='break'){document.body.classList.add('break');document.documentElement.style.setProperty('--accent','var(--calm)');}
-    else{document.body.classList.remove('break');document.documentElement.style.setProperty('--accent','var(--blue)');}
+    document.body.classList.remove('break','pre','post');
+    if(kind==='break'){document.body.classList.add('break');document.documentElement.style.setProperty('--accent','var(--calm)');}
+    else if(kind==='pre'){document.body.classList.add('pre');document.documentElement.style.setProperty('--accent','var(--violet)');}
+    else if(kind==='post'){document.body.classList.add('post');document.documentElement.style.setProperty('--accent','var(--blue)');}
+    else{document.documentElement.style.setProperty('--accent','var(--amber)');} // focus
   }
 
   function doFlash(freq){flash.classList.remove('go');void flash.offsetWidth;flash.classList.add('go');beep(freq);}
@@ -222,16 +248,18 @@
   function renderAuto(){
     const a=computeAuto();
     if(a.state==='pre'){
-      setAccent('idle');phaseEl.textContent='곧 시작';
+      setAccent('pre');phaseEl.textContent='곧 시작';
       sessEl.textContent='밤 10시에 자동으로 시작합니다';
+      timerEl.classList.remove('msgbig');
       timerEl.textContent=fmt(a.remaining);
       document.title='시작까지 '+fmt(a.remaining)+' · 별빛독서실';
       lastPhase=null;return;
     }
     if(a.state==='post'){
-      setAccent('idle');phaseEl.textContent='오늘 종료';
-      sessEl.textContent='수고했어요. 내일 밤 10시에 또 만나요';
-      timerEl.textContent='00:00';
+      setAccent('post');phaseEl.textContent='오늘 종료';
+      sessEl.textContent='';
+      timerEl.classList.add('msgbig');
+      timerEl.innerHTML='수고했어요<br>내일 밤 10시에 또 만나요';
       document.title='오늘 별빛독서실 종료';
       lastPhase=null;return;
     }
@@ -241,6 +269,7 @@
     setAccent(a.phase);
     phaseEl.textContent=a.phase==='focus'?'집중':'휴식';
     sessEl.textContent=a.phase==='focus'?(a.session+'교시 진행 중'):(a.session+'교시 후 쉬는 시간');
+    timerEl.classList.remove('msgbig');
     timerEl.textContent=fmt(a.remaining);
     document.title=(a.phase==='focus'?'[집중] ':'[휴식] ')+fmt(a.remaining)+' · 별빛독서실';
   }
@@ -248,6 +277,7 @@
   // ── 수동 모드 ──
   function renderManual(){
     setAccent(phase);
+    timerEl.classList.remove('msgbig');
     timerEl.textContent=fmt(remaining);
     phaseEl.textContent=phase==='focus'?'집중':'휴식';
     sessEl.textContent=(phase==='focus'?session+'교시':session+'교시 후 쉬는 시간')+(running?' 진행 중':' · 대기');
