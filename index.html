@@ -79,12 +79,8 @@
   .msg{
     margin-top:26px;max-width:900px;text-align:center;
     font-size:27px;font-weight:600;line-height:1.4;color:#eaf1fa;
-    border:1px dashed transparent;border-radius:14px;padding:10px 22px;outline:none;
-    transition:border-color .2s,background .2s;cursor:text;
+    border-radius:14px;padding:10px 22px;cursor:default;
   }
-  .msg:hover{border-color:rgba(255,255,255,.18);}
-  .msg:focus{border-color:var(--accent);background:rgba(255,255,255,.04);}
-  .msg:empty:before{content:attr(data-ph);color:#5d738f;}
   body.post .msg{display:none;}
   /* 휴식 때만 쉬는 문구로 교체 (원장 한마디는 숨김) */
   #breakmsg{display:none;cursor:default;}
@@ -158,8 +154,7 @@
       <div class="phase"><span class="dot"></span><span id="phaseLabel">집중</span></div>
       <div class="session" id="session">1교시 · 시작 버튼을 누르세요</div>
       <div class="timer" id="timer">50:00</div>
-      <div class="msg" id="msg" contenteditable="true" spellcheck="false"
-           data-ph="여기를 눌러 오늘의 한마디를 입력하세요"></div>
+      <div class="msg" id="msg">오늘도 끝까지. 딴 거 없다, 그냥 앉아서 하는 거다.</div>
       <div class="msg" id="breakmsg">물 한잔 하고, 곧 출발!</div>
     </div>
 
@@ -337,11 +332,7 @@
   focusInput.onchange=()=>{if(mode==='manual'&&phase==='focus'&&!running){remaining=focusSec();renderManual();}};
   breakInput.onchange=()=>{if(mode==='manual'&&phase==='break'&&!running){remaining=breakSec();renderManual();}};
 
-  // 오늘의 한마디 저장/복원 (비어있으면 기본 문구)
-  const KEY='remark_studyroom_msg';
-  const DEFAULT_MSG='오늘도 끝까지. 딴 거 없다, 그냥 앉아서 하는 거다.';
-  msgEl.textContent=localStorage.getItem(KEY)||DEFAULT_MSG;
-  msgEl.addEventListener('input',()=>localStorage.setItem(KEY,msgEl.textContent));
+  // 오늘의 한마디 — 고정 문구(편집 불가)
 
   // 단축키
   document.addEventListener('keydown',e=>{
