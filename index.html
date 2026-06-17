@@ -165,7 +165,7 @@
 
     <div class="bottom">
       <div class="rules">
-        <b>카메라 ON</b> · 무슨 공부를 하든 OK · 매일 밤 <b>10:00 ~ 12:00</b><br>
+        <b>카메라 ON</b> · 무슨 공부를 하든 OK · 매일 밤 <b>9:00 ~ 12:00</b><br>
         같이 앉아 끝까지 가는 게 핵심. 부담 말고 그냥 하자.<br>
         질문은 <b>리마크 카톡</b>으로!
       </div>
@@ -190,7 +190,7 @@
         focusInput=$('focusMin'), breakInput=$('breakMin'), msgEl=$('msg'),
         clockEl=$('clock'), nightFill=$('nightFill'), flash=$('flash');
 
-  const START_H=22;            // 밤 10시 자동 시작
+  const START_H=21;            // 밤 9시 자동 시작
   const END_H=24;              // 자정 종료
   let mode='auto';            // 'auto'(시계 연동) | 'manual'
   let phase='focus';
@@ -250,7 +250,7 @@
     const a=computeAuto();
     if(a.state==='pre'){
       setAccent('pre');phaseEl.textContent='곧 시작';
-      sessEl.textContent='밤 10시에 자동으로 시작합니다';
+      sessEl.textContent='밤 9시에 자동으로 시작합니다';
       timerEl.classList.remove('msgbig');
       timerEl.textContent=fmt(a.remaining);
       document.title='시작까지 '+fmt(a.remaining)+' · 별빛독서실';
@@ -260,7 +260,7 @@
       setAccent('post');phaseEl.textContent='오늘 종료';
       sessEl.textContent='';
       timerEl.classList.add('msgbig');
-      timerEl.innerHTML='수고했어요<br>내일 밤 10시에 또 만나요';
+      timerEl.innerHTML='수고했어요<br>내일 밤 9시에 또 만나요';
       document.title='오늘 별빛독서실 종료';
       lastPhase=null;return;
     }
