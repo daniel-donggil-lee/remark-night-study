@@ -205,8 +205,12 @@
   }
 
   // ── 시계 연동(자동) 계산 ──
+  const POST_UNTIL_H=6;        // 자정~새벽6시: '오늘 종료' 표시(getHours 리셋 보정)
   function computeAuto(){
     const startSec=START_H*3600, endSec=END_H*3600, cur=nowSec();
+    // 자정이 지나면 getHours()가 0으로 리셋돼 cur가 endSec(24h)에 도달하지 못한다.
+    // 새벽 시간대(0~POST_UNTIL_H)는 어젯밤 세션이 끝난 직후이므로 '종료' 화면을 보여준다.
+    if(cur<POST_UNTIL_H*3600) return {state:'post'};
     if(cur<startSec) return {state:'pre', remaining:startSec-cur};
     if(cur>=endSec)  return {state:'post'};
     const focus=focusSec(), brk=breakSec(), cycle=focus+brk;
