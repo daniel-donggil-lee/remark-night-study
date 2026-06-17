@@ -82,6 +82,12 @@
     border-radius:14px;padding:10px 22px;cursor:default;
   }
   body.post .msg{display:none;}
+  .note{
+    margin-top:14px;max-width:780px;text-align:center;
+    font-size:17px;font-weight:500;line-height:1.55;color:#9fb4d0;letter-spacing:.01em;
+  }
+  .note b{color:#cfe0f2;font-weight:700;}
+  body.post .note{display:none;}
   /* 휴식 때만 쉬는 문구로 교체 (원장 한마디는 숨김) */
   #breakmsg{display:none;cursor:default;}
   #breakmsg:hover{border-color:transparent;}
@@ -129,6 +135,7 @@
     .session{font-size:12px;margin-bottom:8px;}
     .timer{font-size:clamp(74px,27vw,120px);}
     .msg{font-size:17px;margin-top:16px;padding:8px 12px;max-width:92vw;}
+    .note{font-size:13px;margin-top:10px;max-width:92vw;}
     .bottom{flex-direction:column;align-items:stretch;gap:12px;}
     .rules{font-size:12px;order:2;text-align:center;line-height:1.5;}
     .controls{order:1;flex-wrap:wrap;justify-content:center;gap:8px;}
@@ -156,6 +163,7 @@
       <div class="timer" id="timer">50:00</div>
       <div class="msg" id="msg">오늘도 끝까지. 딴 거 없다, 그냥 앉아서 하는 거다.</div>
       <div class="msg" id="breakmsg">물 한잔 하고, 곧 출발!</div>
+      <div class="note" id="note">카메라 ON · 얼굴 대신 책·손 등 <b>공부하는 쪽</b>을 비추면 OK<br>50분 공부 · 10분 휴식만 인지하면 됩니다</div>
     </div>
 
     <div class="bottom">
